@@ -395,8 +395,8 @@ export default function App() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <a href="tel:+12125550100" className="hidden md:flex items-center gap-1.5 text-[12px] text-foreground/50 hover:text-foreground transition-colors">
-            <Phone size={13} /> +1 (212) 555-0100
+          <a href="tel:+234 9022227842" className="hidden md:flex items-center gap-1.5 text-[12px] text-foreground/50 hover:text-foreground transition-colors">
+            <Phone size={13} /> +234 9022227842
           </a>
           <button
             onClick={() => goListings()}
@@ -423,7 +423,7 @@ export default function App() {
           <button onClick={() => { setAuthMode("login"); setPage("auth"); setAuthMessage(""); setMobileNav(false); }} className="capitalize text-left text-foreground/60 hover:text-foreground py-1">Login</button>
           <button onClick={() => { setAuthMode("signup"); setPage("auth"); setAuthMessage(""); setMobileNav(false); }} className="capitalize text-left text-foreground/60 hover:text-foreground py-1">Sign up</button>
           <hr className="border-border" />
-          <a href="tel:+12125550100" className="flex items-center gap-2 text-foreground/60"><Phone size={14} /> +1 (212) 555-0100</a>
+          <a href="tel:+2349022227842" className="flex items-center gap-2 text-foreground/60"><Phone size={14} /> +234 9022227842</a>
           <a href="mailto:hello@elevate.re" className="flex items-center gap-2 text-foreground/60"><Mail size={14} /> hello@elevate.re</a>
         </div>
       )}
@@ -471,7 +471,7 @@ export default function App() {
           <div>
             <p className="text-background text-[11px] uppercase tracking-[0.18em] mb-5">Contact</p>
             <ul className="space-y-3.5">
-              <li className="flex items-start gap-2.5 text-sm text-background/35"><Phone size={13} className="mt-0.5 flex-shrink-0 text-accent" />+1 (212) 555-0100</li>
+              <li className="flex items-start gap-2.5 text-sm text-background/35"><Phone size={13} className="mt-0.5 flex-shrink-0 text-accent" />+234 9022227842</li>
               <li className="flex items-start gap-2.5 text-sm text-background/35"><Mail size={13} className="mt-0.5 flex-shrink-0 text-accent" />hello@elevate.re</li>
               <li className="flex items-start gap-2.5 text-sm text-background/35"><MapPin size={13} className="mt-0.5 flex-shrink-0 text-accent" />410 Park Avenue<br />New York, NY 10022</li>
             </ul>
@@ -731,7 +731,7 @@ export default function App() {
               </p>
               <div className="space-y-5">
                 {[
-                  { icon: <Phone size={15} />, label: "Call Us", val: "+1 (212) 555-0100" },
+                  { icon: <Phone size={15} />, label: "Call Us", val: "+234 9022227842" },
                   { icon: <Mail size={15} />, label: "Email Us", val: "hello@elevate.re" },
                   { icon: <MapPin size={15} />, label: "Visit Us", val: "410 Park Avenue, New York, NY 10022" },
                 ].map(c => (

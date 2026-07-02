@@ -323,6 +323,11 @@ export default function App() {
   const [showFilters, setShowFilters] = useState(false);
   const [contactForm, setContactForm] = useState({ name: "", email: "", phone: "", interest: "", msg: "" });
   const [contactSent, setContactSent] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
+  const [chatMode, setChatMode] = useState(null);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [chatInput, setChatInput] = useState("");
+  const [chatTyping, setChatTyping] = useState(false);
 
   const toggleFav = (id) =>
     setFavs(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
@@ -361,6 +366,82 @@ export default function App() {
   const submitBook = () => {
     if (!bookForm.name || !bookForm.email) return;
     setBooked(true);
+  };
+
+  const addChatMessage = (sender, text) => {
+    setChatMessages(prev => [...prev, { id: `${Date.now()}-${Math.random()}`, sender, text }]);
+  };
+
+  const getBotResponse = (message) => {
+    const lower = message.toLowerCase();
+    const current = prop ? `${prop.title}` : "this listing";
+    if (page === "detail" && prop) {
+      if (lower.includes("price")) return `This property is currently listed for ${fp(prop.price, deal, prop)}.`;
+      if (lower.includes("rent") || lower.includes("book") || lower.includes("available")) {
+        if (prop.deals.includes("rent")) return `Yes — ${current} is available for rent at ${fp(prop.rentPrice, deal, prop)} per month.`;
+        if (prop.deals.includes("book")) return `You can book ${current} now. Please share your preferred date and contact details.`;
+        return `This property is currently available for purchase at ${fp(prop.price, deal, prop)}.`;
+      }
+      if (lower.includes("bed") || lower.includes("bath") || lower.includes("sqft") || lower.includes("size")) {
+        return `It has ${prop.beds ?? "N/A"} bedrooms, ${prop.baths ?? "N/A"} bathrooms, and ${fa(prop.sqft, prop.type)}.`;
+      }
+    }
+    if (lower.includes("price")) return "Our featured listings range from luxury apartments to commercial towers; ask about a specific property for exact pricing.";
+    if (lower.includes("availability")) return "Most of our properties are available with updated availability information. Tell me what you're looking for and I can help narrow it down.";
+    if (lower.includes("contact")) return "You can always reach customer service via Contact Support or call +234 9022227842 for immediate assistance.";
+    if (lower.includes("buy") || lower.includes("purchase")) return "If you're ready to buy, I can share our most current purchase listings or arrange a private viewing.";
+    if (lower.includes("rent")) return "We have rental options in Manhattan, Brooklyn, and premium development sites. Share your budget and timeline.";
+    if (lower.includes("book")) return "For apartment booking, let me know your preferred move-in date and we can reserve a showing.";
+    const fallback = [
+      "I can help with pricing, availability, property features, or arranging a viewing.",
+      "Tell me which property you're interested in or ask about listings in a neighborhood.",
+      "Happy to help — ask me about listings, booking, or investment opportunities."
+    ];
+    return fallback[Math.floor(Math.random() * fallback.length)];
+  };
+
+  const getSupportResponse = (message) => {
+    const lower = message.toLowerCase();
+    if (lower.includes("hello") || lower.includes("hi") || lower.includes("hey")) return "Hello! My name is Ara from Elevate Customer Care. How may I assist you today?";
+    if (lower.includes("issue") || lower.includes("problem") || lower.includes("question")) return "I'm here to help. Please share the property or service you're asking about and I'll get right on it.";
+    if (lower.includes("urgent") || lower.includes("immediate") || lower.includes("now")) return "I understand urgency. Please provide your preferred contact details and we will prioritize your request.";
+    if (lower.includes("viewing") || lower.includes("showing")) return "Great — I can schedule a viewing for you. What dates work best for your schedule?";
+    if (lower.includes("contact") || lower.includes("call") || lower.includes("phone")) return "You can call our team at +234 9022227842 or continue here and I’ll assist you through chat.";
+    return "Thanks for the details. One of our customer care specialists will review your request and respond with the next steps."
+  };
+
+  const openChat = (mode) => {
+    setChatMode(mode);
+    setChatOpen(true);
+    setChatMessages([
+      {
+        id: `welcome-${mode}`,
+        sender: "system",
+        text: mode === "bot"
+          ? "Hello! I’m Elevate Bot. Ask me about listings, pricing, availability, or booking."
+          : "Welcome to Live Support! Our service team is ready to help with your inquiry."
+      }
+    ]);
+    setChatInput("");
+    setChatTyping(false);
+  };
+
+  const handleSendChat = () => {
+    const message = chatInput.trim();
+    if (!message) return;
+    addChatMessage("user", message);
+    setChatInput("");
+    setChatTyping(true);
+    setTimeout(() => {
+      const response = chatMode === "bot" ? getBotResponse(message) : getSupportResponse(message);
+      addChatMessage(chatMode === "bot" ? "bot" : "support", response);
+      setChatTyping(false);
+    }, chatMode === "bot" ? 800 : 1200);
+  };
+
+  const closeChat = () => {
+    setChatOpen(false);
+    setChatTyping(false);
   };
 
   // ── Navbar ─────────────────────────────────────────────────────────────────
@@ -1045,8 +1126,8 @@ export default function App() {
                         <p className="text-xs text-muted-foreground leading-relaxed">Chat with our service team for personal guidance.</p>
                       </div>
                       <div className="flex flex-col gap-2 mt-2">
-                        <button className="w-full rounded-full bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accent/90 transition-colors">Open Bot Chat</button>
-                        <button className="w-full rounded-full border border-border bg-white px-4 py-2 text-sm font-medium text-foreground hover:bg-slate-100 transition-colors">Contact Support</button>
+                        <button onClick={() => openChat("bot")} className="w-full rounded-full bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accent/90 transition-colors">Open Bot Chat</button>
+                        <button onClick={() => openChat("support")} className="w-full rounded-full border border-border bg-white px-4 py-2 text-sm font-medium text-foreground hover:bg-slate-100 transition-colors">Contact Support</button>
                       </div>
                     </div>
                   </div>
@@ -1185,6 +1266,53 @@ export default function App() {
       {page === "detail" && renderDetail()}
       {page === "auth" && renderAuth()}
       {footer}
+      {chatOpen && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-4 sm:items-center">
+          <div className="w-full max-w-2xl overflow-hidden rounded-[2rem] border border-border bg-background shadow-2xl">
+            <div className="flex items-start justify-between border-b border-border px-6 py-4 bg-white">
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground mb-1">{chatMode === "bot" ? "Bot Assistant" : "Live Support"}</p>
+                <h2 className="text-lg font-semibold text-foreground">{chatMode === "bot" ? "Real Estate Bot Chat" : "Customer Care Chat"}</h2>
+              </div>
+              <button onClick={closeChat} className="rounded-full px-3 py-2 text-sm text-foreground/60 hover:text-foreground">Close</button>
+            </div>
+            <div className="h-[420px] overflow-y-auto p-6 bg-slate-50 space-y-4">
+              {chatMessages.map((message) => (
+                <div key={message.id} className={`${message.sender === "user" ? "ml-auto bg-foreground text-white rounded-3xl rounded-br-none" : "bg-white text-foreground rounded-3xl rounded-bl-none"} max-w-[85%] p-4 shadow-sm`}>
+                  <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-1">
+                    {message.sender === "user" ? "You" : message.sender === "bot" ? "Elevate Bot" : message.sender === "support" ? "Support Agent" : "System"}
+                  </p>
+                  <p className="text-sm leading-relaxed whitespace-pre-line">{message.text}</p>
+                </div>
+              ))}
+              {chatTyping && (
+                <div className="max-w-[65%] bg-white rounded-3xl rounded-bl-none p-4 shadow-sm">
+                  <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-2">{chatMode === "bot" ? "Elevate Bot" : "Support Agent"} is typing...</p>
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-muted animate-bounce" />
+                    <span className="h-2 w-2 rounded-full bg-muted animate-bounce" />
+                    <span className="h-2 w-2 rounded-full bg-muted animate-bounce" />
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="border-t border-border bg-white px-6 py-4">
+              <div className="flex gap-3">
+                <input
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSendChat()}
+                  placeholder="Type your message..."
+                  className="flex-1 rounded-full border border-border px-4 py-3 text-sm outline-none focus:border-accent focus:ring-1 focus:ring-accent/20"
+                />
+                <button onClick={handleSendChat} className="rounded-full bg-accent px-6 py-3 text-sm font-medium text-white hover:bg-accent/90 transition-colors">
+                  Send
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

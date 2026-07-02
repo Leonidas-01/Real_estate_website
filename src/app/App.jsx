@@ -13,8 +13,8 @@ const DATA = [
   {
     id: 1,
     title: "The Meridian Penthouse",
-    address: "240 West 73rd Street, PHD",
-    city: "Upper West Side, NY",
+    address: "240 Pinnock Estate, Lekki Peninsula",
+    city: "Island Osapa London, Lagos",
     type: "apartment",
     deals: ["buy", "rent"],
     price: 4200000,
@@ -30,7 +30,7 @@ const DATA = [
     desc: "An extraordinary penthouse residence occupying the entire top floor of The Meridian. Sweeping panoramic views of Central Park and the Manhattan skyline from every room. Chef's kitchen with Miele appliances, private rooftop terrace, and bespoke finishes throughout.",
     features: ["Panoramic Park Views", "Private Rooftop Terrace", "Chef's Kitchen", "24/7 Concierge", "Private Gym Access", "Wine Cellar", "2 Parking Spaces", "Smart Home System"],
     agentName: "Alexandra Morse",
-    agentPhone: "+1 (212) 555-0147",
+    agentPhone: "+234 (212) 555-0147",
     agentEmail: "amorse@elevate.re",
     agentPhoto: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=80&h=80&fit=crop&auto=format",
     badge: "Featured",
@@ -41,8 +41,8 @@ const DATA = [
   {
     id: 2,
     title: "Riverview Suite 14B",
-    address: "88 Pierrepont Street, Apt 14B",
-    city: "Brooklyn Heights, NY",
+    address: "88 Banana Island, Suite 14B",
+    city: "Lagos Lagoon Ikoyi, Lagos",
     type: "apartment",
     deals: ["buy", "rent"],
     price: 1250000,
@@ -55,21 +55,21 @@ const DATA = [
       "https://images.unsplash.com/photo-1630699144035-c0f6311ec482?w=1200&h=800&fit=crop&auto=format",
     ],
     desc: "A refined pre-war co-op with original hardwood floors, soaring 10-foot ceilings, and coveted Brooklyn Bridge views. Fully renovated kitchen, spa-inspired bathrooms, and generous proportions throughout.",
-    features: ["Brooklyn Bridge Views", "Pre-War Details", "Renovated Kitchen", "Hardwood Floors", "Doorman Building", "Common Roof Deck", "Bike Storage"],
+    features: ["The lekki ikoyi Link Bridge Views", "Pre-War Details", "Renovated Kitchen", "Hardwood Floors", "Doorman Building", "Common Roof Deck", "Bike Storage"],
     agentName: "Marcus Webb",
-    agentPhone: "+1 (718) 555-0293",
+    agentPhone: "+234 (718) 555-0293",
     agentEmail: "mwebb@elevate.re",
     agentPhoto: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=80&h=80&fit=crop&auto=format",
     badge: "New Listing",
     stars: 4.7,
     reviews: 11,
-    year: 1928,
+    year: 1998,
   },
   {
     id: 3,
     title: "The Crest — Unit 7A",
-    address: "285 West 23rd Street, Unit 7A",
-    city: "Chelsea, NY",
+    address: "Elegushi Beach Road, Ikate, Lekki",
+    city: "Lagos, Nigeria ",
     type: "apartment",
     deals: ["buy", "book"],
     price: 875000,
@@ -83,7 +83,7 @@ const DATA = [
     desc: "A modern one-bedroom in the heart of Chelsea's gallery district. Floor-to-ceiling windows flood the space with natural light. Building amenities include rooftop terrace, fitness center, and 24-hour concierge.",
     features: ["Floor-to-Ceiling Windows", "Rooftop Terrace", "Fitness Center", "24hr Concierge", "In-Unit Laundry", "Private Storage Unit"],
     agentName: "Alexandra Morse",
-    agentPhone: "+1 (212) 555-0147",
+    agentPhone: "+234 (212) 555-0147",
     agentEmail: "amorse@elevate.re",
     agentPhoto: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=80&h=80&fit=crop&auto=format",
     stars: 4.6,
@@ -93,8 +93,8 @@ const DATA = [
   {
     id: 4,
     title: "Harrington Commerce Tower",
-    address: "1540 Broadway",
-    city: "Midtown Manhattan, NY",
+    address: "Road 88, Victoria Island",
+    city: "Lagos, Nigeria ",
     type: "building",
     deals: ["buy"],
     price: 42000000,
@@ -107,7 +107,7 @@ const DATA = [
     desc: "A landmark Class A commercial tower at Times Square. Fully tenanted with Fortune 500 leases. Recent lobby renovation, upgraded HVAC, and LEED Gold certification. Cap rate 4.8% with long-term income stability.",
     features: ["22 Floors", "Class A Office", "LEED Gold Certified", "Full Occupancy", "Ground Floor Retail", "8 High-Speed Elevators", "Underground Parking", "Loading Dock"],
     agentName: "James Harrington",
-    agentPhone: "+1 (212) 555-0381",
+    agentPhone: "+234 (212) 555-0381",
     agentEmail: "jharrington@elevate.re",
     agentPhoto: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&auto=format",
     badge: "Investment",
@@ -442,7 +442,7 @@ export default function App() {
               <span style={serif} className="text-background text-lg font-semibold tracking-[0.06em]">ELEVATE</span>
             </div>
             <p className="text-background/35 text-sm leading-relaxed mb-6 max-w-xs">
-              New York's most trusted name in luxury real estate. Apartments, commercial buildings, and premier land since 2009.
+              Lagos State most trusted name in luxury real estate. Apartments, commercial buildings, and premier land since 2009.
             </p>
             <div className="flex gap-2.5">
               {[Instagram, Twitter, Linkedin, Globe].map((Icon, i) => (
@@ -473,7 +473,7 @@ export default function App() {
             <ul className="space-y-3.5">
               <li className="flex items-start gap-2.5 text-sm text-background/35"><Phone size={13} className="mt-0.5 flex-shrink-0 text-accent" />+234 9022227842</li>
               <li className="flex items-start gap-2.5 text-sm text-background/35"><Mail size={13} className="mt-0.5 flex-shrink-0 text-accent" />hello@elevate.re</li>
-              <li className="flex items-start gap-2.5 text-sm text-background/35"><MapPin size={13} className="mt-0.5 flex-shrink-0 text-accent" />410 Park Avenue<br />New York, NY 10022</li>
+              <li className="flex items-start gap-2.5 text-sm text-background/35"><MapPin size={13} className="mt-0.5 flex-shrink-0 text-accent" />410 Chevron Road<br />Lagos, Nigeria 100001</li>
             </ul>
           </div>
         </div>
@@ -502,7 +502,7 @@ export default function App() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/45 to-black/70" />
         <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
           <div className="mb-12">
-            <p className="text-white/50 text-[11px] tracking-[0.28em] uppercase mb-5">Luxury Real Estate · New York</p>
+            <p className="text-white/50 text-[11px] tracking-[0.28em] uppercase mb-5">Luxury Real Estate · Lagos, Nigeria</p>
             <h1 style={serif} className="text-white text-5xl md:text-7xl lg:text-8xl font-medium leading-[1.04] mb-8 max-w-3xl">
               Find Your<br />Perfect<br /><em>Space</em>
             </h1>

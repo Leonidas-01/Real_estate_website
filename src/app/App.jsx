@@ -317,11 +317,7 @@ export default function App() {
   const [imgIdx, setImgIdx] = useState(0);
   const [bookForm, setBookForm] = useState({ name: "", email: "", phone: "", date: "", msg: "" });
   const [booked, setBooked] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState("card");
-  const [paymentDetails, setPaymentDetails] = useState({ cardNumber: "", cardName: "", expiry: "", cvc: "", bankName: "", accountNumber: "" });
-  const [paymentProcessed, setPaymentProcessed] = useState(false);
-  const [paymentError, setPaymentError] = useState("");
-  const [authMode, setAuthMode] = useState("login");
+  const [authMode, setAuthMode] = useState("signup");
   const [authForm, setAuthForm] = useState({ name: "", email: "", password: "", confirmPassword: "" });
   const [authMessage, setAuthMessage] = useState("");
   const [showFilters, setShowFilters] = useState(false);
@@ -332,10 +328,8 @@ export default function App() {
     setFavs(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
   const goDetail = (p) => {
-    setProp(p); setImgIdx(0); setBooked(false); setPaymentProcessed(false); setPaymentError("");
+    setProp(p); setImgIdx(0); setBooked(false);
     setBookForm({ name: "", email: "", phone: "", date: "", msg: "" });
-    setPaymentMethod("card");
-    setPaymentDetails({ cardNumber: "", cardName: "", expiry: "", cvc: "", bankName: "", accountNumber: "" });
     setPage("detail"); window.scrollTo(0, 0);
   };
 
@@ -365,27 +359,7 @@ export default function App() {
   }, [deal, typeF, minP, maxP, minBeds, locSearch, sort]);
 
   const submitBook = () => {
-    if (!bookForm.name || !bookForm.email) {
-      setPaymentError("Please enter your name and email.");
-      return;
-    }
-
-    if (paymentMethod === "card") {
-      const { cardNumber, cardName, expiry, cvc } = paymentDetails;
-      if (!cardNumber || !cardName || !expiry || !cvc) {
-        setPaymentError("Please complete all card payment details.");
-        return;
-      }
-    } else {
-      const { bankName, accountNumber } = paymentDetails;
-      if (!bankName || !accountNumber) {
-        setPaymentError("Please complete your bank transfer details.");
-        return;
-      }
-    }
-
-    setPaymentError("");
-    setPaymentProcessed(true);
+    if (!bookForm.name || !bookForm.email) return;
     setBooked(true);
   };
 
@@ -416,8 +390,8 @@ export default function App() {
               onClick={() => { setPage("home"); setTimeout(() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }), 80); }}
               className="text-foreground/55 hover:text-foreground transition-colors"
             >Contact</button>
-            <button onClick={() => { setAuthMode("login"); setPage("auth"); }} className="text-foreground/55 hover:text-foreground transition-colors">Login</button>
-            <button onClick={() => { setAuthMode("signup"); setPage("auth"); }} className="text-foreground/55 hover:text-foreground transition-colors">Sign up</button>
+            <button onClick={() => { setAuthMode("login"); setPage("auth"); setAuthMessage(""); }} className="text-foreground/55 hover:text-foreground transition-colors">Login</button>
+            <button onClick={() => { setAuthMode("signup"); setPage("auth"); setAuthMessage(""); }} className="text-foreground/55 hover:text-foreground transition-colors">Sign up</button>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -446,8 +420,8 @@ export default function App() {
           {["buy", "rent", "book"].map(d => (
             <button key={d} onClick={() => { goListings(d); setMobileNav(false); }} className="capitalize text-left text-foreground/60 hover:text-foreground py-1">{d}</button>
           ))}
-          <button onClick={() => { setAuthMode("login"); setPage("auth"); setMobileNav(false); }} className="capitalize text-left text-foreground/60 hover:text-foreground py-1">Login</button>
-          <button onClick={() => { setAuthMode("signup"); setPage("auth"); setMobileNav(false); }} className="capitalize text-left text-foreground/60 hover:text-foreground py-1">Sign up</button>
+          <button onClick={() => { setAuthMode("login"); setPage("auth"); setAuthMessage(""); setMobileNav(false); }} className="capitalize text-left text-foreground/60 hover:text-foreground py-1">Login</button>
+          <button onClick={() => { setAuthMode("signup"); setPage("auth"); setAuthMessage(""); setMobileNav(false); }} className="capitalize text-left text-foreground/60 hover:text-foreground py-1">Sign up</button>
           <hr className="border-border" />
           <a href="tel:+12125550100" className="flex items-center gap-2 text-foreground/60"><Phone size={14} /> +1 (212) 555-0100</a>
           <a href="mailto:hello@elevate.re" className="flex items-center gap-2 text-foreground/60"><Mail size={14} /> hello@elevate.re</a>
@@ -1037,43 +1011,6 @@ export default function App() {
                       </div>
                       <textarea placeholder="Any questions or special requests…" rows={3} value={bookForm.msg} onChange={e => setBookForm(f => ({ ...f, msg: e.target.value }))} className="w-full border border-border px-3 py-2.5 text-sm outline-none focus:border-accent transition-colors resize-none placeholder:text-foreground/35" />
 
-                      <div className="rounded-3xl border border-border bg-slate-50 p-4">
-                        <p className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground mb-3">Payment Method</p>
-                        <div className="grid grid-cols-2 gap-2 mb-4">
-                          {[
-                            { value: "card", label: "Credit / Debit Card" },
-                            { value: "bank", label: "Bank Transfer" },
-                          ].map(option => (
-                            <button
-                              key={option.value}
-                              onClick={() => setPaymentMethod(option.value)}
-                              className={`rounded-full border px-3 py-2 text-xs font-medium transition-colors ${paymentMethod === option.value ? "border-accent bg-accent text-white" : "border-border bg-white text-foreground/75 hover:text-foreground"}`}
-                            >
-                              {option.label}
-                            </button>
-                          ))}
-                        </div>
-
-                        {paymentMethod === "card" ? (
-                          <div className="space-y-3">
-                            <input type="text" placeholder="Card Number" value={paymentDetails.cardNumber} onChange={e => setPaymentDetails(d => ({ ...d, cardNumber: e.target.value }))} className="w-full border border-border px-3 py-2.5 text-sm outline-none focus:border-accent transition-colors" />
-                            <input type="text" placeholder="Name on Card" value={paymentDetails.cardName} onChange={e => setPaymentDetails(d => ({ ...d, cardName: e.target.value }))} className="w-full border border-border px-3 py-2.5 text-sm outline-none focus:border-accent transition-colors" />
-                            <div className="grid grid-cols-2 gap-2">
-                              <input type="text" placeholder="Expiry (MM/YY)" value={paymentDetails.expiry} onChange={e => setPaymentDetails(d => ({ ...d, expiry: e.target.value }))} className="w-full border border-border px-3 py-2.5 text-sm outline-none focus:border-accent transition-colors" />
-                              <input type="text" placeholder="CVC" value={paymentDetails.cvc} onChange={e => setPaymentDetails(d => ({ ...d, cvc: e.target.value }))} className="w-full border border-border px-3 py-2.5 text-sm outline-none focus:border-accent transition-colors" />
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="space-y-3">
-                            <input type="text" placeholder="Bank Name" value={paymentDetails.bankName} onChange={e => setPaymentDetails(d => ({ ...d, bankName: e.target.value }))} className="w-full border border-border px-3 py-2.5 text-sm outline-none focus:border-accent transition-colors" />
-                            <input type="text" placeholder="Account Number" value={paymentDetails.accountNumber} onChange={e => setPaymentDetails(d => ({ ...d, accountNumber: e.target.value }))} className="w-full border border-border px-3 py-2.5 text-sm outline-none focus:border-accent transition-colors" />
-                          </div>
-                        )}
-                      </div>
-
-                      {paymentError && <p className="text-xs text-destructive mt-2">{paymentError}</p>}
-                      {paymentProcessed && <p className="text-xs text-foreground/80 mt-2">Payment processed securely. We will send a confirmation email shortly.</p>}
-
                       <button onClick={submitBook} className="w-full bg-accent text-white py-3.5 text-sm font-medium hover:bg-accent/85 transition-colors flex items-center justify-center gap-2">
                         {deal === "book" ? "Book Now" : deal === "rent" ? "Apply Now" : "Request Viewing"} <ArrowRight size={14} />
                       </button>
@@ -1138,20 +1075,22 @@ export default function App() {
       <div className="max-w-4xl mx-auto px-6 py-14">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
           <div className="rounded-[2rem] bg-accent/10 p-10 text-white">
-            <p className="text-sm uppercase tracking-[0.26em] text-accent mb-6">Welcome back to Elevate</p>
-            <h1 style={serif} className="text-4xl font-semibold mb-6">{authMode === "login" ? "Sign in to your account" : "Create your Elevate account"}</h1>
+            <p className="text-sm uppercase tracking-[0.26em] text-accent mb-6">{authMode === "login" ? "Welcome back" : "Create your account"}</p>
+            <h1 style={serif} className="text-4xl font-semibold mb-6">
+              {authMode === "login" ? "Sign in to Elevate" : "Create your Elevate account"}
+            </h1>
             <p className="text-sm text-foreground/80 leading-relaxed">
               {authMode === "login"
-                ? "Access saved properties, booking history, and secure offers."
-                : "Get started with a free account and save your favorite listings for faster checkout."
+                ? "Access saved listings, booking history, and faster service."
+                : "Get started with a free account and save your favorite listings for faster access."
               }
             </p>
             <div className="mt-10 rounded-3xl border border-white/10 bg-white/10 p-6">
               <h2 className="text-sm uppercase tracking-[0.22em] text-accent mb-4">Why Elevate?</h2>
               <ul className="space-y-4 text-sm text-foreground/90">
-                <li className="flex gap-3"><span className="mt-1 h-2.5 w-2.5 rounded-full bg-accent"></span>Fast checkout for bookings and purchases.</li>
-                <li className="flex gap-3"><span className="mt-1 h-2.5 w-2.5 rounded-full bg-accent"></span>Secure account and payment details.</li>
-                <li className="flex gap-3"><span className="mt-1 h-2.5 w-2.5 rounded-full bg-accent"></span>Custom alerts for new listings.</li>
+                <li className="flex gap-3"><span className="mt-1 h-2.5 w-2.5 rounded-full bg-accent"></span>{authMode === "login" ? "Quick access to your saved properties." : "Save favorite listings and receive alerts."}</li>
+                <li className="flex gap-3"><span className="mt-1 h-2.5 w-2.5 rounded-full bg-accent"></span>{authMode === "login" ? "Secure logins with your email." : "Secure account access and booking history."}</li>
+                <li className="flex gap-3"><span className="mt-1 h-2.5 w-2.5 rounded-full bg-accent"></span>{authMode === "login" ? "Faster checkout for requests." : "Faster checkout for all property requests."}</li>
               </ul>
             </div>
           </div>
@@ -1215,7 +1154,7 @@ export default function App() {
                     setAuthMessage("Passwords do not match.");
                     return;
                   }
-                  setAuthMessage(authMode === "login" ? "Signed in successfully." : "Account created successfully.");
+                  setAuthMessage(authMode === "login" ? "Logged in successfully." : "Account created successfully.");
                   setTimeout(() => setPage("home"), 1200);
                 }}
                 className="w-full rounded-full bg-accent px-4 py-3 text-sm font-medium text-white hover:bg-accent/90 transition-colors"
@@ -1225,8 +1164,8 @@ export default function App() {
               {authMessage && <p className="text-sm text-accent/90">{authMessage}</p>}
               <div className="pt-4 border-t border-border text-sm text-foreground/60">
                 {authMode === "login"
-                  ? "New here? Create an account to save favorite listings and speed up checkout."
-                  : "Already have an account? Login to continue."
+                  ? "Need an account? Switch to Sign up to create one."
+                  : "Already have an account? Switch to Login to sign in."
                 }
               </div>
             </div>

@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Search, Heart, Menu, X, MapPin, BedDouble, Bath, Maximize2,
   Phone, Mail, ArrowRight, Star, LayoutGrid, List, ChevronLeft,
@@ -235,6 +235,15 @@ const fa = (sqft, type) => {
 
 const serif = { fontFamily: "'Playfair Display', Georgia, serif" };
 
+const HERO_IMAGES = [
+  // Modern interior living room
+  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&h=1080&fit=crop&auto=format",
+  // Modern interior / building design
+  "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=1920&h=1080&fit=crop&auto=format",
+  // City building skyline (commercial)
+  "https://images.unsplash.com/photo-1494526585095-c41746248156?w=1920&h=1080&fit=crop&auto=format",
+];
+
 // ─── PropCard Component ───────────────────────────────────────────────────────
 
 function PropCard({ p, deal, favs, onToggleFav, onSelect, layout = "grid" }) {
@@ -323,11 +332,19 @@ export default function App() {
   const [showFilters, setShowFilters] = useState(false);
   const [contactForm, setContactForm] = useState({ name: "", email: "", phone: "", interest: "", msg: "" });
   const [contactSent, setContactSent] = useState(false);
+  const [heroIndex, setHeroIndex] = useState(0);
   const [chatOpen, setChatOpen] = useState(false);
   const [chatMode, setChatMode] = useState(null);
   const [chatMessages, setChatMessages] = useState([]);
   const [chatInput, setChatInput] = useState("");
   const [chatTyping, setChatTyping] = useState(false);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setHeroIndex((prev) => (prev + 1) % HERO_IMAGES.length);
+    }, 6500);
+    return () => clearInterval(timer);
+  }, []);
 
   const toggleFav = (id) =>
     setFavs(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
@@ -575,11 +592,32 @@ export default function App() {
   const renderHome = () => (
     <>
       {/* HERO */}
-      <section className="relative min-h-screen flex items-end pb-20 pt-16">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url('https://images.unsplash.com/photo-1554793000-245d3a3c2a51?w=1920&h=1080&fit=crop&auto=format')` }}
-        />
+      <section className="relative min-h-screen flex items-end pb-20 pt-16 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden">
+          <div
+            className="absolute inset-0 flex h-full w-[300%] transition-transform duration-1000 ease-out"
+            style={{ transform: `translateX(-${heroIndex * 100}%)` }}
+          >
+            {HERO_IMAGES.map((src, idx) => (
+              <div
+                key={idx}
+                className="w-full flex-shrink-0 h-full bg-cover bg-center"
+                style={{ backgroundImage: `url('${src}')` }}
+              />
+            ))}
+          </div>
+          <div className="absolute inset-0 bg-black/25" />
+        </div>
+        <div className="absolute inset-x-0 bottom-6 z-10 flex justify-center gap-2">
+          {HERO_IMAGES.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setHeroIndex(idx)}
+              className={`h-2.5 w-2.5 rounded-full transition-colors ${heroIndex === idx ? "bg-white" : "bg-white/40 hover:bg-white"}`}
+              aria-label={`Show slide ${idx + 1}`}
+            />
+          ))}
+        </div>
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/45 to-black/70" />
         <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
           <div className="mb-12">

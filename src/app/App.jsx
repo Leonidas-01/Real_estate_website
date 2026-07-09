@@ -743,7 +743,7 @@ export default function App() {
                 Over 15 Years of<br />Excellence in<br /><em>Real Estate</em>
               </h2>
               <p className="text-background/45 text-sm leading-relaxed mb-10">
-                Since 2009, Elevate has represented buyers, sellers, and investors across New York's most prestigious residential and commercial markets. Our team of expert advisors brings unmatched market knowledge and discretion to every transaction.
+                Since 2009, Elevate has represented buyers, sellers, and investors across Lagos most prestigious residential and commercial markets. Our team of expert advisors brings unmatched market knowledge and discretion to every transaction.
               </p>
               <button onClick={() => goListings()} className="bg-accent text-white text-sm px-8 py-3.5 hover:bg-accent/85 transition-colors flex items-center gap-2">
                 Explore Properties <ArrowRight size={15} />
@@ -773,7 +773,7 @@ export default function App() {
           <h2 style={serif} className="text-foreground text-3xl md:text-4xl font-medium mb-16 text-center">Why Choose Elevate</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
             {[
-              { icon: <Award size={22} />, title: "Market-Leading Expertise", desc: "Our advisors average 12 years of experience in New York real estate, with deep specialization in both residential and commercial transactions." },
+              { icon: <Award size={22} />, title: "Market-Leading Expertise", desc: "Our advisors average 12 years of experience in Lagos real estate, with deep specialization in both residential and commercial transactions." },
               { icon: <Shield size={22} />, title: "Absolute Discretion", desc: "Every transaction is handled with the highest standards of confidentiality. Many of our clients are public figures who trust us with their most private decisions." },
               { icon: <TrendingUp size={22} />, title: "Maximum Return", desc: "We negotiate relentlessly on your behalf. Our clients consistently achieve above-market results — whether buying, selling, or investing." },
             ].map(c => (
@@ -852,7 +852,7 @@ export default function App() {
                 {[
                   { icon: <Phone size={15} />, label: "Call Us", val: "+234 9022227842" },
                   { icon: <Mail size={15} />, label: "Email Us", val: "hello@elevate.re" },
-                  { icon: <MapPin size={15} />, label: "Visit Us", val: "410 Park Avenue, New York, NY 10022" },
+                  { icon: <MapPin size={15} />, label: "Visit Us", val: "410 Park Avenue, Lagos, NG 10022" },
                 ].map(c => (
                   <div key={c.label} className="flex items-start gap-4">
                     <div className="w-10 h-10 bg-accent/20 flex items-center justify-center text-accent flex-shrink-0 mt-0.5">{c.icon}</div>
